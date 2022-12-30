@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter_todo/pages/home_page.dart';
+import 'package:flutter_todo/pages/signin_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -58,17 +60,25 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     "If you already have an account?",
                     style: TextStyle(fontSize: 15, color: Colors.white70),
                   ),
-                  Text(
-                    "Login here",
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white70),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (builder) => SignInPage()),
+                          (route) => false);
+                    },
+                    child: Text(
+                      "Login here",
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70),
+                    ),
                   )
                 ],
               )
@@ -151,6 +161,10 @@ class _SignUpPageState extends State<SignUpPage> {
           setState(() {
             circular = false;
           });
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (builder) => HomePage()),
+              (route) => false);
         } catch (e) {
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);

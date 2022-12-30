@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter_todo/pages/home_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -9,6 +11,10 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  firebase_auth.FirebaseAuth firebaseAuth = firebase_auth.FirebaseAuth.instance;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _pwdController = TextEditingController();
+  bool circular = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +45,11 @@ class _SignInPageState extends State<SignInPage> {
               const SizedBox(
                 height: 10,
               ),
-              textbutton("Email"),
+              textbutton("Email", _emailController, false),
               const SizedBox(
                 height: 10,
               ),
-              textbutton("Password"),
+              textbutton("Password", _pwdController, true),
               const SizedBox(
                 height: 20,
               ),
@@ -115,15 +121,22 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget textbutton(String ltext) {
+  Widget textbutton(
+      String ltext, TextEditingController controller, bool obsecuretext) {
     return Container(
       height: 60,
       width: MediaQuery.of(context).size.width - 50,
       child: TextFormField(
+        controller: controller,
+        obscureText: obsecuretext,
         style: const TextStyle(color: Colors.white70),
         decoration: InputDecoration(
             labelText: ltext,
             labelStyle: const TextStyle(fontSize: 15, color: Colors.white70),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+                borderSide:
+                    const BorderSide(color: Colors.amberAccent, width: 1)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide: const BorderSide(color: Colors.white70, width: 1))),
@@ -132,25 +145,53 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget signUpButton() {
-    return Container(
-      height: 60,
-      width: MediaQuery.of(context).size.width - 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(colors: [
-          Color(0xfffff8fb1),
-          Color(0xffffce2db),
-          Color(0xfffff8fb1)
-        ]),
+    return InkWell(
+      onTap: () async {
+        setState(() {
+          circular = true;
+        });
+        try {
+          firebase_auth.UserCredential userCredential =
+              await firebaseAuth.signInWithEmailAndPassword(
+                  email: _emailController.text, password: _pwdController.text);
+          print(userCredential.user);
+          setState(() {
+            circular = false;
+          });
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (builder) => HomePage()),
+              (route) => false);
+        } catch (e) {
+          final snackbar = SnackBar(content: Text(e.toString()));
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+          setState(() {
+            circular = false;
+          });
+        }
+      },
+      child: Container(
+        height: 60,
+        width: MediaQuery.of(context).size.width - 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(colors: [
+            Color(0xfffff8fb1),
+            Color(0xffffce2db),
+            Color(0xfffff8fb1)
+          ]),
+        ),
+        child: Center(
+            child: circular
+                ? CircularProgressIndicator()
+                : Text(
+                    "Sign In",
+                    style: TextStyle(
+                        color: Color.fromARGB(172, 0, 0, 0),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  )),
       ),
-      child: const Center(
-          child: Text(
-        "Sign Up",
-        style: TextStyle(
-            color: Color.fromARGB(172, 0, 0, 0),
-            fontSize: 20,
-            fontWeight: FontWeight.bold),
-      )),
     );
   }
 }
