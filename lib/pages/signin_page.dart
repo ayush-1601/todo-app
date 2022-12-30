@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  firebase_auth.FirebaseAuth firebaseAuth = firebase_auth.FirebaseAuth.instance;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _pwdController = TextEditingController();
-  bool circular = false;
+class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                "Sign up",
+                "Sign In",
                 style: TextStyle(fontSize: 35, color: Colors.white),
               ),
               const SizedBox(
@@ -44,11 +39,11 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(
                 height: 10,
               ),
-              textbutton("Email", _emailController, false),
+              textbutton("Email"),
               const SizedBox(
                 height: 10,
               ),
-              textbutton("Password", _pwdController, true),
+              textbutton("Password"),
               const SizedBox(
                 height: 20,
               ),
@@ -60,17 +55,24 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text(
-                    "If you already have an account?",
+                    "Don't have an account? ",
                     style: TextStyle(fontSize: 15, color: Colors.white70),
                   ),
                   Text(
-                    "Login here",
+                    "Create here",
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.white70),
                   )
                 ],
+              ),
+              const Text(
+                "Forgot Password?",
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white70),
               )
             ],
           ),
@@ -113,22 +115,15 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget textbutton(
-      String ltext, TextEditingController controller, bool obsecuretext) {
+  Widget textbutton(String ltext) {
     return Container(
       height: 60,
       width: MediaQuery.of(context).size.width - 50,
       child: TextFormField(
-        controller: controller,
-        obscureText: obsecuretext,
         style: const TextStyle(color: Colors.white70),
         decoration: InputDecoration(
             labelText: ltext,
             labelStyle: const TextStyle(fontSize: 15, color: Colors.white70),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
-                borderSide:
-                    const BorderSide(color: Colors.amberAccent, width: 1)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide: const BorderSide(color: Colors.white70, width: 1))),
@@ -137,50 +132,25 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget signUpButton() {
-    return InkWell(
-      onTap: () async {
-        setState(() {
-          circular = true;
-        });
-        try {
-          firebase_auth.UserCredential userCredential =
-              await firebaseAuth.createUserWithEmailAndPassword(
-                  email: _emailController.text.toString().trim(),
-                  password: _pwdController.text);
-          print(userCredential.user);
-          setState(() {
-            circular = false;
-          });
-        } catch (e) {
-          final snackbar = SnackBar(content: Text(e.toString()));
-          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-          setState(() {
-            circular = false;
-          });
-        }
-      },
-      child: Container(
-        height: 60,
-        width: MediaQuery.of(context).size.width - 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(colors: [
-            Color(0xfffff8fb1),
-            Color(0xffffce2db),
-            Color(0xfffff8fb1)
-          ]),
-        ),
-        child: Center(
-            child: circular
-                ? const CircularProgressIndicator()
-                : Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        color: Color.fromARGB(172, 0, 0, 0),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  )),
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width - 60,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(colors: [
+          Color(0xfffff8fb1),
+          Color(0xffffce2db),
+          Color(0xfffff8fb1)
+        ]),
       ),
+      child: const Center(
+          child: Text(
+        "Sign Up",
+        style: TextStyle(
+            color: Color.fromARGB(172, 0, 0, 0),
+            fontSize: 20,
+            fontWeight: FontWeight.bold),
+      )),
     );
   }
 }
