@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter_todo/pages/home_page.dart';
+import 'package:flutter_todo/pages/phoneAuth.dart';
 import 'package:flutter_todo/pages/signin_page.dart';
 import 'package:flutter_todo/services/auth_service.dart';
 
@@ -40,7 +41,10 @@ class _SignUpPageState extends State<SignUpPage> {
               buttons("Continue with Google", "assets/google.svg", () async {
                 await authClass.googleSignIn(context);
               }),
-              buttons("Continue with Phone", "assets/mobile-phone.svg", () {}),
+              buttons("Continue with Phone", "assets/mobile-phone.svg", () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => phoneAuthPage()));
+              }),
               const SizedBox(
                 height: 10,
               ),
