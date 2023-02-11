@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/services/auth_service.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 
@@ -12,9 +13,13 @@ class phoneAuthPage extends StatefulWidget {
 }
 
 class _phoneAuthPageState extends State<phoneAuthPage> {
-  int start = 30;
+  int start = 59;
   bool wait = false;
   String buttonname = "Send";
+  TextEditingController phoneController = TextEditingController();
+  AuthClass authClass = AuthClass();
+  String verificationIdfinal = "";
+  String smsCode = "";
 
   @override
   Widget build(BuildContext context) {
@@ -85,24 +90,31 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
                   style: TextStyle(fontSize: 18, color: Colors.yellow),
                 )
               ])),
-
               SizedBox(
                 height: 100,
               ),
-
-              Container(
-                height: 60,
-                width: MediaQuery.of(context).size.width - 40,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(25),
+              InkWell(
+                onTap: (() {
+                  authClass.signInwithPhoneNumber(
+                      verificationIdfinal, smsCode, context);
+                }),
+                child: Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width - 40,
+                  decoration: BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Center(
+                      child: Text(
+                    "Let's Go",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        color: Colors.white),
+                  )),
                 ),
-
-                child: Center(child: Text("Let's Go", style: TextStyle(
-                  fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white
-                ),)),
               )
-
             ],
           ),
         ),
@@ -128,9 +140,9 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
 
   Widget otpTextField(BuildContext context) {
     return OTPTextField(
-      length: 5,
+      length: 6,
       width: MediaQuery.of(context).size.width,
-      fieldWidth: 70,
+      fieldWidth: 50,
       otpFieldStyle: OtpFieldStyle(
           backgroundColor: Colors.black87, borderColor: Colors.white70),
       style: TextStyle(fontSize: 17, color: Colors.white),
@@ -138,6 +150,9 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
       fieldStyle: FieldStyle.underline,
       onCompleted: (pin) {
         print("Completed: " + pin);
+        setState(() {
+          smsCode = pin;
+        });
       },
     );
   }
@@ -150,6 +165,7 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25), color: Colors.white70),
       child: TextFormField(
+        controller: phoneController,
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: "Enter your phone no.",
@@ -168,13 +184,15 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
             suffixIcon: InkWell(
               onTap: wait
                   ? null
-                  : (() {
+                  : (() async {
                       starttimer();
                       setState(() {
                         wait = true;
                         buttonname = "Resend";
-                        start = 30;
+                        start = 59;
                       });
+                      await authClass.verifyPhoneNumber(
+                          "+91 ${phoneController.text}", context, setData);
                     }),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 15),
@@ -189,5 +207,11 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
             )),
       ),
     );
+  }
+
+  void setData(verificationId) {
+    setState(() {
+      verificationIdfinal = verificationId;
+    });
   }
 }

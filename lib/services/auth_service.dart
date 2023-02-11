@@ -8,13 +8,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthClass {
-  GoogleSignIn _googleSignIn = GoogleSignIn(
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   final storage = new FlutterSecureStorage();
 
@@ -68,5 +68,59 @@ class AuthClass {
       await auth.signOut();
       await storage.delete(key: "token");
     } catch (e) {}
+  }
+
+  Future<void> verifyPhoneNumber(
+      String phoneNumber, BuildContext context, Function setData) async {
+    PhoneVerificationCompleted verificationCompleted =
+        (PhoneAuthCredential phoneAuthCredential) async {
+      showsnackbar(context, "Verification Completed");
+    };
+    PhoneVerificationFailed verificationFailed =
+        (FirebaseAuthException exception) {
+      showsnackbar(context, exception.toString());
+    };
+    PhoneCodeSent codeSent = (verificationID, forceResendingToken) {
+      showsnackbar(context, "Code sent successfully");
+      setData(verificationID);
+    };
+    PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (verificationId) {
+      showsnackbar(context, "Time-Out");
+    };
+
+    try {
+      await auth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          verificationCompleted: verificationCompleted,
+          verificationFailed: verificationFailed,
+          codeSent: codeSent,
+          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+    } catch (e) {
+      showsnackbar(context, e.toString());
+    }
+  }
+
+  Future<void> signInwithPhoneNumber(
+      String verificationId, String smsCode, BuildContext context) async {
+    try {
+      AuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
+
+      UserCredential userCredential =
+          await auth.signInWithCredential(credential);
+      storeTokenAndData(userCredential);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (builder) => HomePage()),
+          (route) => false);
+      showsnackbar(context, "Logged in");
+    } catch (e) {
+      showsnackbar(context, e.toString());
+    }
+  }
+
+  void showsnackbar(BuildContext context, String text) {
+    final snackbar = SnackBar(content: Text(text));
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }
