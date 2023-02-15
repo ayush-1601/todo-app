@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/pages/addTodoPage.dart';
 import 'package:flutter_todo/pages/home_page.dart';
 import 'package:flutter_todo/pages/signup_page.dart';
 import 'package:flutter_todo/pages/signin_page.dart';
@@ -44,6 +45,6 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return currentPage;
+    return AddTodoPage();
   }
 }
