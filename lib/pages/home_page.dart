@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthClass authClass = AuthClass();
+  List<Select> selected = [];
 
   final Stream<QuerySnapshot> _stream =
       FirebaseFirestore.instance.collection("todo").snapshots();
@@ -134,6 +135,8 @@ class _HomePageState extends State<HomePage> {
                   iconData = Icons.run_circle_outlined;
                   iconColor = Colors.black;
               }
+              selected.add(
+                  Select(id: snapshot.data.docs[index].id, checkValue: false));
 
               return InkWell(
                 onTap: () {
@@ -148,11 +151,13 @@ class _HomePageState extends State<HomePage> {
                 child: TodoCard(
                   title:
                       document["title"] == "" ? "add title" : document["title"],
-                  check: false,
+                  check: selected[index].checkValue,
                   iconData: iconData,
                   iconBgcolor: iconColor,
                   time: "10 AM",
                   iconColor: Colors.pinkAccent,
+                  index: index,
+                  onChange: onChange,
                 ),
               );
             },
@@ -161,7 +166,20 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  void onChange(int index) {
+    setState(() {
+      selected[index].checkValue = !selected[index].checkValue;
+    });
+  }
 }
+
+class Select {
+  String id;
+  bool checkValue = false;
+  Select({required this.id, required this.checkValue});
+}
+
 
 // IconButton(
 //             onPressed: () async {

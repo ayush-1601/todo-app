@@ -8,7 +8,9 @@ class TodoCard extends StatelessWidget {
       required this.time,
       required this.iconColor,
       required this.iconData,
-      required this.iconBgcolor});
+      required this.iconBgcolor,
+      required this.onChange,
+      required this.index});
 
   final String title;
   final String time;
@@ -16,6 +18,8 @@ class TodoCard extends StatelessWidget {
   final Color iconColor;
   final Color iconBgcolor;
   final bool check;
+  final Function onChange;
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +38,9 @@ class TodoCard extends StatelessWidget {
                     activeColor: Colors.blueAccent,
                     checkColor: Colors.greenAccent,
                     value: check,
-                    onChanged: ((value) {})),
+                    onChanged: ((value) {
+                      onChange(index);
+                    })),
               )),
           Expanded(
             child: Container(
