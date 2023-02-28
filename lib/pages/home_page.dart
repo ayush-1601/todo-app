@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/pages/signup_page.dart';
 import 'package:flutter_todo/pages/todoCard.dart';
@@ -13,6 +15,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthClass authClass = AuthClass();
+
+  final Stream<QuerySnapshot> _stream =
+      FirebaseFirestore.instance.collection("todo").snapshots();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,79 +90,62 @@ class _HomePageState extends State<HomePage> {
             ),
             label: "")
       ]),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            children: [
-              TodoCard(
-                title: "study",
+      body: StreamBuilder(
+        stream: _stream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              IconData iconData;
+              Color iconColor;
+              Map<String, dynamic> document =
+                  snapshot.data.docs[index].data() as Map<String, dynamic>;
+
+              switch (document["category"]) {
+                case "Food":
+                  iconData = Icons.food_bank;
+                  iconColor = Colors.greenAccent;
+                  break;
+                case "study":
+                  iconData = Icons.book_sharp;
+                  iconColor = Colors.purpleAccent;
+                  break;
+                case "class":
+                  iconData = Icons.school;
+                  iconColor = Colors.blueAccent;
+                  break;
+                case "Run":
+                  iconData = Icons.run_circle_outlined;
+                  iconColor = Colors.cyanAccent;
+                  break;
+                case "yoga":
+                  iconData = Icons.person;
+                  iconColor = Colors.amberAccent;
+                  break;
+                case "workout":
+                  iconData = Icons.alarm;
+                  iconColor = Colors.cyan;
+                  break;
+                default:
+                  iconData = Icons.run_circle_outlined;
+                  iconColor = Colors.black;
+              }
+
+              return TodoCard(
+                title:
+                    document["title"] == "" ? "add title" : document["title"],
                 check: false,
-                iconData: Icons.alarm,
-                iconBgcolor: Colors.white,
+                iconData: iconData,
+                iconBgcolor: iconColor,
                 time: "10 AM",
                 iconColor: Colors.pinkAccent,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TodoCard(
-                title: "study",
-                check: false,
-                iconData: Icons.alarm,
-                iconBgcolor: Colors.white,
-                time: "10 AM",
-                iconColor: Colors.pinkAccent,
-              ),
-              TodoCard(
-                title: "study",
-                check: false,
-                iconData: Icons.alarm,
-                iconBgcolor: Colors.white,
-                time: "10 AM",
-                iconColor: Colors.pinkAccent,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TodoCard(
-                title: "study",
-                check: false,
-                iconData: Icons.alarm,
-                iconBgcolor: Colors.white,
-                time: "10 AM",
-                iconColor: Colors.pinkAccent,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TodoCard(
-                title: "study",
-                check: false,
-                iconData: Icons.alarm,
-                iconBgcolor: Colors.white,
-                time: "10 AM",
-                iconColor: Colors.pinkAccent,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TodoCard(
-                title: "study",
-                check: false,
-                iconData: Icons.alarm,
-                iconBgcolor: Colors.white,
-                time: "10 AM",
-                iconColor: Colors.pinkAccent,
-              ),
-              SizedBox(
-                height: 15,
-              ),
-            ],
-          ),
-        ),
+              );
+            },
+          );
+        },
       ),
     );
   }
