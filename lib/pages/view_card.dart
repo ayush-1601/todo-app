@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 
 class ViewCardPage extends StatefulWidget {
   const ViewCardPage({super.key, required this.document, required this.id});
@@ -64,17 +63,34 @@ class _ViewCardPageState extends State<ViewCardPage> {
                         color: Colors.white,
                         size: 30,
                       )),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          edit = !edit;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                        color: edit ? Colors.amber : Colors.white,
-                        size: 30,
-                      )),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            FirebaseFirestore.instance
+                                .collection("todo")
+                                .doc(widget.id)
+                                .delete();
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 30,
+                          )),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              edit = !edit;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                            color: edit ? Colors.amber : Colors.white,
+                            size: 30,
+                          )),
+                    ],
+                  ),
                 ],
               ),
               Padding(
