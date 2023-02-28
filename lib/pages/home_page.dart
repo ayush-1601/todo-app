@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/pages/signup_page.dart';
 import 'package:flutter_todo/pages/todoCard.dart';
+import 'package:flutter_todo/pages/view_card.dart';
 import 'package:flutter_todo/services/auth_service.dart';
 import 'addTodoPage.dart';
 
@@ -134,14 +135,25 @@ class _HomePageState extends State<HomePage> {
                   iconColor = Colors.black;
               }
 
-              return TodoCard(
-                title:
-                    document["title"] == "" ? "add title" : document["title"],
-                check: false,
-                iconData: iconData,
-                iconBgcolor: iconColor,
-                time: "10 AM",
-                iconColor: Colors.pinkAccent,
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => ViewCardPage(
+                                document: document,
+                                id: snapshot.data.docs[index].id,
+                              )));
+                },
+                child: TodoCard(
+                  title:
+                      document["title"] == "" ? "add title" : document["title"],
+                  check: false,
+                  iconData: iconData,
+                  iconBgcolor: iconColor,
+                  time: "10 AM",
+                  iconColor: Colors.pinkAccent,
+                ),
               );
             },
           );
