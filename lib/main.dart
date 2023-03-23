@@ -6,12 +6,14 @@ import 'package:flutter_todo/pages/signup_page.dart';
 import 'package:flutter_todo/pages/signin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter_todo/services/auth_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
     home: MyApp(),
+    theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
   ));
 }
 
@@ -24,6 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Widget currentPage = SignUpPage();
+
   AuthClass authClass = AuthClass();
 
   @override
@@ -45,6 +48,6 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return currentPage;
   }
 }

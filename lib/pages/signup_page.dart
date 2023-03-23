@@ -25,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.black87,
+          color: Colors.black,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           MaterialPageRoute(builder: (builder) => SignInPage()),
                           (route) => false);
                     },
-                    child: Text(
+                    child: const Text(
                       "Login here",
                       style: TextStyle(
                           fontSize: 15,
@@ -141,6 +141,7 @@ class _SignUpPageState extends State<SignUpPage> {
       height: 60,
       width: MediaQuery.of(context).size.width - 50,
       child: TextFormField(
+        cursorColor: Colors.indigo,
         controller: controller,
         obscureText: obsecuretext,
         style: const TextStyle(color: Colors.white70),
@@ -150,7 +151,7 @@ class _SignUpPageState extends State<SignUpPage> {
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide:
-                    const BorderSide(color: Colors.amberAccent, width: 1)),
+                    const BorderSide(color: Colors.greenAccent, width: 4)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide: const BorderSide(color: Colors.white70, width: 1))),
@@ -187,14 +188,11 @@ class _SignUpPageState extends State<SignUpPage> {
       },
       child: Container(
         height: 60,
-        width: MediaQuery.of(context).size.width - 60,
+        width: MediaQuery.of(context).size.width - 200,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(colors: [
-            Color(0xfffff8fb1),
-            Color(0xffffce2db),
-            Color(0xfffff8fb1)
-          ]),
+          borderRadius: BorderRadius.circular(50),
+          gradient: const LinearGradient(
+              colors: [Colors.indigoAccent, Colors.pinkAccent]),
         ),
         child: Center(
             child: circular

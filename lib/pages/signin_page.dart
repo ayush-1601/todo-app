@@ -25,7 +25,7 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.black87,
+          color: Colors.black,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -155,7 +155,7 @@ class _SignInPageState extends State<SignInPage> {
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide:
-                    const BorderSide(color: Colors.amberAccent, width: 1)),
+                    const BorderSide(color: Colors.greenAccent, width: 4)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide: const BorderSide(color: Colors.white70, width: 1))),
@@ -191,18 +191,17 @@ class _SignInPageState extends State<SignInPage> {
       },
       child: Container(
         height: 60,
-        width: MediaQuery.of(context).size.width - 60,
+        width: MediaQuery.of(context).size.width - 200,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(colors: [
-            Color(0xfffff8fb1),
-            Color(0xffffce2db),
-            Color(0xfffff8fb1)
-          ]),
+          borderRadius: BorderRadius.circular(50),
+          gradient: const LinearGradient(
+              colors: [Colors.indigoAccent, Colors.pinkAccent]),
         ),
         child: Center(
             child: circular
-                ? CircularProgressIndicator()
+                ? CircularProgressIndicator(
+                    color: Colors.indigoAccent,
+                  )
                 : Text(
                     "Sign In",
                     style: TextStyle(

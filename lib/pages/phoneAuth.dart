@@ -24,6 +24,7 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black87,
       appBar: AppBar(
         backgroundColor: Color.fromARGB(192, 0, 0, 0),
         title: Text("Sign Up"),
@@ -56,7 +57,7 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
                       ),
                     ),
                     Text(
-                      " Enter 5 digit OTP ",
+                      " Enter 6 digit OTP ",
                       style: TextStyle(fontSize: 20, color: Colors.grey),
                     ),
                     Expanded(
@@ -100,18 +101,20 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
                 }),
                 child: Container(
                   height: 60,
-                  width: MediaQuery.of(context).size.width - 40,
+                  width: MediaQuery.of(context).size.width - 200,
                   decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(25),
+                    gradient: LinearGradient(
+                        colors: [Colors.indigoAccent, Colors.pinkAccent]),
+                    borderRadius: BorderRadius.circular(50),
                   ),
                   child: Center(
                       child: Text(
-                    "Let's Go",
+                    "Sign Up",
                     style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                        color: Colors.white),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Color.fromARGB(172, 0, 0, 0),
+                    ),
                   )),
                 ),
               )
@@ -144,7 +147,7 @@ class _phoneAuthPageState extends State<phoneAuthPage> {
       width: MediaQuery.of(context).size.width,
       fieldWidth: 50,
       otpFieldStyle: OtpFieldStyle(
-          backgroundColor: Colors.black87, borderColor: Colors.white70),
+          backgroundColor: Colors.blueGrey, borderColor: Colors.white70),
       style: TextStyle(fontSize: 17, color: Colors.white),
       textFieldAlignment: MainAxisAlignment.spaceAround,
       fieldStyle: FieldStyle.underline,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddTodoPage extends StatefulWidget {
   const AddTodoPage({super.key});
@@ -38,9 +39,9 @@ class _AddTodoPageState extends State<AddTodoPage> {
                     Navigator.pop(context);
                   },
                   icon: Icon(
-                    CupertinoIcons.arrow_left,
+                    CupertinoIcons.chevron_back,
                     color: Colors.white,
-                    size: 30,
+                    size: 35,
                   )),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
@@ -48,7 +49,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Create",
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                             fontSize: 35,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -82,7 +83,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                       SizedBox(
                         width: 20,
                       ),
-                      chipData("planned", Colors.lightBlueAccent),
+                      chipData("Planned", Colors.lightBlueAccent),
                     ]),
                     SizedBox(
                       height: 30,
@@ -100,30 +101,30 @@ class _AddTodoPageState extends State<AddTodoPage> {
                       height: 12,
                     ),
                     Wrap(runSpacing: 10, children: [
-                      categoryData("Food", Colors.greenAccent),
+                      categoryData("Study", Colors.green),
                       SizedBox(
                         width: 20,
                       ),
-                      categoryData("class", Colors.blueAccent),
+                      categoryData("Market", Colors.blueGrey),
                       SizedBox(
                         width: 20,
                       ),
-                      categoryData("study", Colors.purpleAccent),
+                      categoryData("Groceries", Colors.deepPurple),
                       SizedBox(
                         width: 20,
                       ),
-                      categoryData("Run", Colors.cyanAccent),
+                      categoryData("Health", Colors.cyan),
                       SizedBox(
                         width: 20,
                       ),
-                      categoryData("yoga", Colors.amberAccent),
+                      categoryData("Office", Colors.red),
                       SizedBox(
                         width: 20,
                       ),
-                      categoryData("workout", Colors.cyan),
+                      categoryData("Workout", Colors.orange),
                     ]),
                     SizedBox(
-                      height: 50,
+                      height: 30,
                     ),
                     button(),
                     SizedBox(
@@ -181,7 +182,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
         maxLines: null,
         decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "Add description",
+            hintText: "Add description...",
             hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
             contentPadding: EdgeInsets.only(left: 20, right: 20)),
       ),
@@ -196,12 +197,14 @@ class _AddTodoPageState extends State<AddTodoPage> {
         });
       },
       child: Chip(
-        backgroundColor: type == label ? Colors.black : colr,
+        backgroundColor: type == label ? Colors.white : colr,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         label: Text(
           label,
           style: TextStyle(
-              color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+              color: type == label ? Colors.black : Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
         ),
         labelPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 4),
       ),
@@ -216,12 +219,14 @@ class _AddTodoPageState extends State<AddTodoPage> {
         });
       },
       child: Chip(
-        backgroundColor: category == label ? Colors.black : colr,
+        backgroundColor: category == label ? Colors.white : colr,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         label: Text(
           label,
           style: TextStyle(
-              color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+              color: category == label ? Colors.black : Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
         ),
         labelPadding: EdgeInsets.symmetric(horizontal: 17, vertical: 4),
       ),
@@ -240,7 +245,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
         style: TextStyle(color: Colors.grey, fontSize: 20),
         decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "task title",
+            hintText: "Add task title...",
             hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
             contentPadding: EdgeInsets.only(left: 20, right: 20)),
       ),
